@@ -11,4 +11,12 @@ else
     exit 1
 fi
 
+# Test if the student service has valid syntax
+if node -c src/services/studentService.js; then
+    echo "Student service syntax check passed"
+else
+    echo "Student service syntax check failed"
+    exit 1
+fi
+
 echo "Basic tests passed"
