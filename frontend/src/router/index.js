@@ -17,6 +17,8 @@ import CourseSearch from '../views/admin/CourseSearch.vue'
 import AddCourse from '../views/admin/AddCourse.vue'
 import EditCourse from '../views/admin/EditCourse.vue'
 import OpeningManage from '../views/admin/OpeningManage.vue'
+import GradeQuery from '../views/admin/GradeQuery.vue'
+import GradeEdit from '../views/admin/GradeEdit.vue'
 
 const routes = [
   {
@@ -45,7 +47,9 @@ const routes = [
       { path: 'admin/courses', name: 'CourseSearch', component: CourseSearch, meta: { role: '管理员' } },
       { path: 'admin/courses/add', name: 'AddCourse', component: AddCourse, meta: { role: '管理员' } },
       { path: 'admin/courses/edit/:id', name: 'EditCourse', component: EditCourse, meta: { role: '管理员' } },
-      { path: 'admin/openings', name: 'OpeningManage', component: OpeningManage, meta: { role: '管理员' } }
+      { path: 'admin/openings', name: 'OpeningManage', component: OpeningManage, meta: { role: '管理员' } },
+      { path: 'admin/grades', name: 'GradeQuery', component: GradeQuery, meta: { role: '管理员' } },
+      { path: 'admin/grades/edit/:id', name: 'GradeEdit', component: GradeEdit, meta: { role: '管理员' } }
     ]
   }
 ]
