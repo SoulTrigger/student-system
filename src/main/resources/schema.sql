@@ -1,0 +1,48 @@
+CREATE TABLE IF NOT EXISTS student (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS teacher (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS course (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    credit INT CHECK (credit BETWEEN 1 AND 10)
+);
+
+CREATE TABLE IF NOT EXISTS opening (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    course_id BIGINT NOT NULL,
+    teacher_id BIGINT NOT NULL,
+    semester VARCHAR(20) NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher(id)
+);
+
+CREATE TABLE IF NOT EXISTS selection (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    opening_id BIGINT NOT NULL,
+    student_id BIGINT NOT NULL,
+    UNIQUE(opening_id, student_id),
+    FOREIGN KEY (opening_id) REFERENCES opening(id),
+    FOREIGN KEY (student_id) REFERENCES student(id)
+);
+
+CREATE TABLE IF NOT EXISTS grade (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    selection_id BIGINT NOT NULL,
+    score INT CHECK (score BETWEEN 0 AND 100),
+    semester VARCHAR(20) NOT NULL,
+    FOREIGN KEY (selection_id) REFERENCES selection(id)
+);
+
+-- Default admin user (BCrypt hash of 'admin123')
+INSERT IGNORE INTO teacher (name, password) VALUES ('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi');
