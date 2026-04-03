@@ -18,53 +18,20 @@ Started: 2026-04-03T17:08:00+08:00
 - RequestContextHolder: ThreadLocal-based, cleared in afterCompletion
 - Validation: spring-boot-starter-validation with Jakarta @NotBlank
 - Test pattern: @SpringBootTest + @AutoConfigureMockMvc, admin ID fetched dynamically via JdbcTemplate
-- Controllers return ResponseEntity<?> with error body Map pattern for forbidden/error responses
-- Role-based access checked via RequestContextHolder.getRole() in controller methods
-- DTOs used for responses with course/teacher name enrichment via service-layer joins
+- Controllers check role via RequestContextHolder.getRole(), return 403 if wrong role
+- Service layer throws RuntimeException for business errors, controllers catch and return 400
+- DTO pattern: Response DTOs with joined data (studentName, teacherName, courseName from FK lookups)
+- Filtering pattern: apply DB-level filters first (via QueryWrapper), then in-memory filtering for cross-table fields
+- Student/Teacher tables use auto-increment `id` as PK (not student_id/teacher_id)
+- Frontend vitest tests without jsdom: use pure logic tests, avoid mount() unless jsdom env configured
 
----
-
-## 2026-04-03 17:16 - US-001: Project scaffolding and database schema
-- Created Spring Boot 3.2 Maven project with all dependencies
-- 6 entity classes: Student, Teacher, Course, Opening, Selection, Grade
-- 6 mapper interfaces extending BaseMapper
-- CORS config allowing localhost:5173
-- Security config with BCryptPasswordEncoder, stateless sessions
-- SQL schema with all tables, FKs, constraints
-- 8 tests: all 6 tables exist, admin user inserted, BCrypt password verified
-- Build and tests pass
-- Files: pom.xml, src/main/java/com/student/system/**, src/main/resources/**, src/test/**
-
----
-
-## 2026-04-03 17:34 - US-002: JWT authentication backend (login/logout/token)
-- JwtUtil: generateToken(userId, role, name), parseToken(), isExpired(), getUserId/Role/Name
-- Secret & expiry configurable via application.yml (jwt.secret, jwt.expiration)
-- AuthController: POST /api/auth/login (validates credentials, returns JWT), POST /api/auth/logout
-- LoginResponse: {token, role, name, userId}
-- LoginRequest: @NotBlank validation on userId, password, role
-- AuthInterceptor: validates Bearer token on /api/** except /api/auth/**, sets RequestContextHolder
-- RequestContextHolder: ThreadLocal<Long userId>, ThreadLocal<String role/name>
-- WebMvcConfig: registers AuthInterceptor
-- DataInitializer: creates admin user with BCrypt-encoded password (replaced schema.sql INSERT)
-- spring-boot-starter-validation added to pom.xml
-- 8 tests: JwtUtil generate/parse/expire, login success/wrong password/empty fields, logout, protected without token, protected with token
-- Build and all 16 tests pass
-- **Learnings:** H2 doesn't support INSERT IGNORE; BCrypt hashes must be generated at runtime; Spring Security permitAll lets interceptor handle auth
-
----
-
-## 2026-04-03 18:42 - US-007: Selection (选课) backend - student course enrollment
-- SelectionService: listAvailable, create, listMine, getTotalCredits, withdraw
-- StudentSelectionController: 4 endpoints under /api/student/selections
-  - GET /available - browse openings not yet selected, with fuzzy/exact courseName filter
-  - POST / - create selection with validation (duplicate, 24 credit limit, 8 course limit)
-  - GET /mine - list student's selections with totalCredits count
-  - DELETE /{id} - withdraw, cascading delete of associated grade
-- DTOs: AvailableOpeningResponse, SelectionResponse
-- 9 tests: list available, select course, cannot select twice, credit limit, course limit, withdraw with grade cascade, mine with credits, fuzzy search, non-student forbidden
-- Build and all tests pass
-- Files: SelectionService.java, StudentSelectionController.java, AvailableOpeningResponse.java, SelectionResponse.java, SelectionTest.java
-- **Learnings:** Cascade delete pattern (grade → selection) used in both withdraw and opening deletion
-
+## 2026-04-03 20:42 - US-017: Admin homepage and role-based navigation refinement
+- Updated AdminHome.vue with welcome card showing '当前系统：学生信息管理系统', '欢迎您使用本系统', and username
+- Refactored Layout.vue admin menus from flat items to sub-menus matching PRD: 学生管理(添加学生/学生列表/搜索学生), 教师管理(添加教师/教师列表), 课程管理(添加课程/搜索课程/开课表管理), 成绩管理(学生成绩查询)
+- Fixed teacher menus: 成绩管理 now only has 成绩列表 (was 成绩查询+成绩录入), added 编辑个人信息 label
+- Fixed student menus: 选课管理 now only has 已选课程 (was 选课查询+已选课程)
+- Added navigation-homepage.test.js with 12 tests covering route guards, menu structure, logout behavior
+- All 89 tests pass, build succeeds
+- **Files changed:** AdminHome.vue, Layout.vue, navigation-homepage.test.js
+- **Learnings:** vitest config has no jsdom environment, so mount() tests fail; use pure logic tests instead
 ---

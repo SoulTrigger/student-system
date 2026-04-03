@@ -36,7 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSearch">查询</el-button>
-        <el-button @click="handleResetSearch">重置</el-button>
+        <el-button type="warning" @click="handleResetSearch">重置</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="results" border stripe v-loading="loading">

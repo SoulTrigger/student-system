@@ -49,8 +49,8 @@ const handleSearch = async () => {
     const params = { page: 1, size: 100 }
     if (semester.value) params.semester = semester.value
     const res = await axios.get('/api/student/grades', { params })
-    results.value = res.data.records || []
-    averageScore.value = res.data.averageScore != null ? res.data.averageScore : '0.0'
+    const data = res.data; results.value = data.grades?.records || data.records || []
+    averageScore.value = data.averageScore != null ? data.averageScore : '0.0'
   } catch (e) {
     ElMessage.error('查询失败')
   } finally {
