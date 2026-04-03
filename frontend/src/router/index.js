@@ -9,6 +9,10 @@ import StudentList from '../views/admin/StudentList.vue'
 import AddStudent from '../views/admin/AddStudent.vue'
 import EditStudent from '../views/admin/EditStudent.vue'
 import StudentSearch from '../views/admin/StudentSearch.vue'
+import TeacherList from '../views/admin/TeacherList.vue'
+import AddTeacher from '../views/admin/AddTeacher.vue'
+import EditTeacher from '../views/admin/EditTeacher.vue'
+import TeacherSearch from '../views/admin/TeacherSearch.vue'
 
 const routes = [
   {
@@ -29,7 +33,11 @@ const routes = [
       { path: 'admin/students', name: 'StudentList', component: StudentList, meta: { role: '管理员' } },
       { path: 'admin/students/add', name: 'AddStudent', component: AddStudent, meta: { role: '管理员' } },
       { path: 'admin/students/edit/:id', name: 'EditStudent', component: EditStudent, meta: { role: '管理员' } },
-      { path: 'admin/students/search', name: 'StudentSearch', component: StudentSearch, meta: { role: '管理员' } }
+      { path: 'admin/students/search', name: 'StudentSearch', component: StudentSearch, meta: { role: '管理员' } },
+      { path: 'admin/teachers', name: 'TeacherList', component: TeacherList, meta: { role: '管理员' } },
+      { path: 'admin/teachers/add', name: 'AddTeacher', component: AddTeacher, meta: { role: '管理员' } },
+      { path: 'admin/teachers/edit/:id', name: 'EditTeacher', component: EditTeacher, meta: { role: '管理员' } },
+      { path: 'admin/teachers/search', name: 'TeacherSearch', component: TeacherSearch, meta: { role: '管理员' } }
     ]
   }
 ]
