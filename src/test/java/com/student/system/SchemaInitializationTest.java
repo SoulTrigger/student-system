@@ -65,7 +65,7 @@ public class SchemaInitializationTest {
     void testAdminPasswordIsBcrypted() {
         String password = jdbcTemplate.queryForObject(
             "SELECT password FROM teacher WHERE name = 'admin'", String.class);
-        assertTrue(password != null && password.startsWith("$2a$"), 
+        assertTrue(password != null && password.startsWith("$2a$"),
             "Admin password should be BCrypt hashed");
     }
 }

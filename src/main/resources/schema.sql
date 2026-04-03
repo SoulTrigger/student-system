@@ -44,5 +44,3 @@ CREATE TABLE IF NOT EXISTS grade (
     FOREIGN KEY (selection_id) REFERENCES selection(id)
 );
 
--- Default admin user (BCrypt hash of 'admin123')
-INSERT IGNORE INTO teacher (name, password) VALUES ('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi');
