@@ -1,0 +1,36 @@
+# Progress Log
+Run: 76bc4d7e-b843-4c74-8e78-f440c0131bc3
+Task: Student Information Management System
+Started: 2026-04-03T17:08:00+08:00
+
+## Codebase Patterns
+- Spring Boot 3.2 + MyBatis-Plus (must use mybatis-plus-spring-boot3-starter, not mybatis-plus-boot-starter)
+- Tests use H2 in-memory DB with MODE=MySQL for compatibility
+- Package: com.student.system
+- Entities in entity/, Mappers in mapper/, Config in config/
+- build.sh / test.sh wrap Maven commands
+- schema.sql is auto-initialized by Spring Boot sql.init
+- Admin user inserted via DataInitializer (CommandLineRunner) using PasswordEncoder, NOT schema.sql
+- H2 doesn't support INSERT IGNORE — use DataInitializer for seed data instead
+- BCrypt hashes in schema.sql may not match across JVM versions — always use PasswordEncoder at runtime
+- JWT: jjwt 0.12.5 with io.jsonwebtoken.security.Keys for HMAC signing
+- Auth: interceptor-based (not Spring Security filters), WebMvcConfig registers interceptor excluding /api/auth/**
+- RequestContextHolder: ThreadLocal-based, cleared in afterCompletion
+- Validation: spring-boot-starter-validation with Jakarta @NotBlank
+- Test pattern: @SpringBootTest + @AutoConfigureMockMvc, admin ID fetched dynamically via JdbcTemplate
+- Controller pattern: checkAdmin() private method returns ResponseEntity<?> if not admin
+- Service pattern: Page<Entity> → Page<Response> conversion, toResponse() strips password
+- Admin user lives in teacher table (id=1, name='admin') — test searches must filter by name to avoid counting admin
+- Cascade delete pattern: delete child records in loops before parent (grades→selections→openings→teacher)
+
+---
+## 2026-04-03T18:00 - US-004: Teacher CRUD backend (admin)
+- Implemented TeacherController, TeacherService, TeacherRequest, TeacherResponse
+- GET /api/admin/teachers/search with id/name/fuzzy/page/size params
+- POST /api/admin/teachers with auto-generated ID, BCrypt default password '123456'
+- PUT /api/admin/teachers/{id} updates name/password
+- DELETE /api/admin/teachers/{id} cascade deletes openings→selections→grades
+- 9 tests in TeacherCrudTest: create, search, fuzzy search, update, cascade delete, validation, auth
+- All 33 tests pass
+- **Learnings:** Admin user is in teacher table; search tests must filter by name. Cascade delete for teacher goes through openings→selections→grades chain.
+---
