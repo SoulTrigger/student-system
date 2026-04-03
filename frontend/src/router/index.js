@@ -19,6 +19,11 @@ import EditCourse from '../views/admin/EditCourse.vue'
 import OpeningManage from '../views/admin/OpeningManage.vue'
 import GradeQuery from '../views/admin/GradeQuery.vue'
 import GradeEdit from '../views/admin/GradeEdit.vue'
+import CourseOpen from '../views/teacher/CourseOpen.vue'
+import MyCourses from '../views/teacher/MyCourses.vue'
+import GradeManage from '../views/teacher/GradeManage.vue'
+import GradeEntry from '../views/teacher/GradeEntry.vue'
+import ProfileEdit from '../views/teacher/ProfileEdit.vue'
 
 const routes = [
   {
@@ -35,6 +40,11 @@ const routes = [
       { path: '', redirect: '/login' },
       { path: 'student', name: 'StudentHome', component: StudentHome, meta: { role: '学生' } },
       { path: 'teacher', name: 'TeacherHome', component: TeacherHome, meta: { role: '老师' } },
+      { path: 'teacher/courses', name: 'CourseOpen', component: CourseOpen, meta: { role: '老师' } },
+      { path: 'teacher/my-courses', name: 'MyCourses', component: MyCourses, meta: { role: '老师' } },
+      { path: 'teacher/grades', name: 'GradeManage', component: GradeManage, meta: { role: '老师' } },
+      { path: 'teacher/grade-entry', name: 'GradeEntry', component: GradeEntry, meta: { role: '老师' } },
+      { path: 'teacher/profile', name: 'ProfileEdit', component: ProfileEdit, meta: { role: '老师' } },
       { path: 'admin', name: 'AdminHome', component: AdminHome, meta: { role: '管理员' } },
       { path: 'admin/students', name: 'StudentList', component: StudentList, meta: { role: '管理员' } },
       { path: 'admin/students/add', name: 'AddStudent', component: AddStudent, meta: { role: '管理员' } },

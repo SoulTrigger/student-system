@@ -10,9 +10,33 @@
     <div class="body">
       <div class="sidebar">
         <el-menu :default-active="activeMenu" background-color="#1a1a2e" text-color="#fff" active-text-color="#409eff" router>
-          <el-menu-item v-for="item in menus" :key="item.path" :index="item.path">
-            <span>{{ item.label }}</span>
-          </el-menu-item>
+          <template v-if="auth.role === '老师'">
+            <el-menu-item index="/teacher">教师首页</el-menu-item>
+            <el-sub-menu index="teacher-courses">
+              <template #title><span>开设课程</span></template>
+              <el-menu-item index="/teacher/courses">课程查询</el-menu-item>
+              <el-menu-item index="/teacher/my-courses">已开课程</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="teacher-grades">
+              <template #title><span>成绩管理</span></template>
+              <el-menu-item index="/teacher/grades">成绩查询</el-menu-item>
+              <el-menu-item index="/teacher/grade-entry">成绩录入</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="teacher-profile">
+              <template #title><span>个人中心</span></template>
+              <el-menu-item index="/teacher/profile">信息修改</el-menu-item>
+            </el-sub-menu>
+          </template>
+          <template v-else-if="auth.role === '管理员'">
+            <el-menu-item v-for="item in adminMenus" :key="item.path" :index="item.path">
+              <span>{{ item.label }}</span>
+            </el-menu-item>
+          </template>
+          <template v-else>
+            <el-menu-item v-for="item in studentMenus" :key="item.path" :index="item.path">
+              <span>{{ item.label }}</span>
+            </el-menu-item>
+          </template>
         </el-menu>
       </div>
       <div class="main-content">
@@ -31,29 +55,21 @@ const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
 
-const roleMenus = {
-  '学生': [
-    { path: '/student', label: '首页' },
-    { path: '/student/selections', label: '选课管理' },
-    { path: '/student/grades', label: '成绩查询' }
-  ],
-  '老师': [
-    { path: '/teacher', label: '首页' },
-    { path: '/teacher/courses', label: '课程管理' },
-    { path: '/teacher/grades', label: '成绩录入' }
-  ],
-  '管理员': [
-    { path: '/admin', label: '首页' },
-    { path: '/admin/students', label: '学生管理' },
-    { path: '/admin/teachers', label: '教师管理' },
-    { path: '/admin/courses', label: '课程管理' },
-    { path: '/admin/openings', label: '开课管理' },
-    { path: '/admin/selections', label: '选课管理' },
-    { path: '/admin/grades', label: '成绩管理' }
-  ]
-}
+const adminMenus = [
+  { path: '/admin', label: '首页' },
+  { path: '/admin/students', label: '学生管理' },
+  { path: '/admin/teachers', label: '教师管理' },
+  { path: '/admin/courses', label: '课程管理' },
+  { path: '/admin/openings', label: '开课管理' },
+  { path: '/admin/grades', label: '成绩管理' }
+]
 
-const menus = computed(() => roleMenus[auth.role] || [])
+const studentMenus = [
+  { path: '/student', label: '首页' },
+  { path: '/student/selections', label: '选课管理' },
+  { path: '/student/grades', label: '成绩查询' }
+]
+
 const activeMenu = computed(() => route.path)
 
 const handleLogout = () => {
