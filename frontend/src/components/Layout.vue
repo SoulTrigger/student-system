@@ -14,7 +14,6 @@
             <el-menu-item index="/student">学生首页</el-menu-item>
             <el-sub-menu index="student-selection">
               <template #title><span>选课管理</span></template>
-              <el-menu-item index="/student/selections">选课查询</el-menu-item>
               <el-menu-item index="/student/my-selections">已选课程</el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="student-grades">
@@ -23,7 +22,7 @@
             </el-sub-menu>
             <el-sub-menu index="student-profile">
               <template #title><span>个人中心</span></template>
-              <el-menu-item index="/student/profile">信息修改</el-menu-item>
+              <el-menu-item index="/student/profile">编辑个人信息</el-menu-item>
             </el-sub-menu>
           </template>
           <template v-else-if="auth.role === '老师'">
@@ -35,18 +34,36 @@
             </el-sub-menu>
             <el-sub-menu index="teacher-grades">
               <template #title><span>成绩管理</span></template>
-              <el-menu-item index="/teacher/grades">成绩查询</el-menu-item>
-              <el-menu-item index="/teacher/grade-entry">成绩录入</el-menu-item>
+              <el-menu-item index="/teacher/grades">成绩列表</el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="teacher-profile">
               <template #title><span>个人中心</span></template>
-              <el-menu-item index="/teacher/profile">信息修改</el-menu-item>
+              <el-menu-item index="/teacher/profile">编辑个人信息</el-menu-item>
             </el-sub-menu>
           </template>
           <template v-else-if="auth.role === '管理员'">
-            <el-menu-item v-for="item in adminMenus" :key="item.path" :index="item.path">
-              <span>{{ item.label }}</span>
-            </el-menu-item>
+            <el-menu-item index="/admin">管理员首页</el-menu-item>
+            <el-sub-menu index="admin-students">
+              <template #title><span>学生管理</span></template>
+              <el-menu-item index="/admin/students/add">添加学生</el-menu-item>
+              <el-menu-item index="/admin/students">学生列表</el-menu-item>
+              <el-menu-item index="/admin/students/search">搜索学生</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="admin-teachers">
+              <template #title><span>教师管理</span></template>
+              <el-menu-item index="/admin/teachers/add">添加教师</el-menu-item>
+              <el-menu-item index="/admin/teachers">教师列表</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="admin-courses">
+              <template #title><span>课程管理</span></template>
+              <el-menu-item index="/admin/courses/add">添加课程</el-menu-item>
+              <el-menu-item index="/admin/courses">搜索课程</el-menu-item>
+              <el-menu-item index="/admin/openings">开课表管理</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="admin-grades">
+              <template #title><span>成绩管理</span></template>
+              <el-menu-item index="/admin/grades">学生成绩查询</el-menu-item>
+            </el-sub-menu>
           </template>
         </el-menu>
       </div>
@@ -65,15 +82,6 @@ import { useAuthStore } from '../stores/auth'
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
-
-const adminMenus = [
-  { path: '/admin', label: '首页' },
-  { path: '/admin/students', label: '学生管理' },
-  { path: '/admin/teachers', label: '教师管理' },
-  { path: '/admin/courses', label: '课程管理' },
-  { path: '/admin/openings', label: '开课管理' },
-  { path: '/admin/grades', label: '成绩管理' }
-]
 
 const activeMenu = computed(() => route.path)
 
