@@ -16,15 +16,11 @@ Started: 2026-04-03T17:08:00+08:00
 - JWT: jjwt 0.12.5 with io.jsonwebtoken.security.Keys for HMAC signing
 - Auth: interceptor-based (not Spring Security filters), WebMvcConfig registers interceptor excluding /api/auth/**
 - RequestContextHolder: ThreadLocal-based, cleared in afterCompletion
-- Validation: spring-boot-starter-validation with Jakarta @NotBlank/@Size/@Min/@Max/@NotNull
+- Validation: spring-boot-starter-validation with Jakarta @NotBlank
 - Test pattern: @SpringBootTest + @AutoConfigureMockMvc, admin ID fetched dynamically via JdbcTemplate
-- Controller pattern: checkAdmin() helper, ResponseEntity<?>, errorBody() helper, /api/admin/{resource}
-- Service pattern: @Transactional on write ops, toResponse() mapper method, Page<> return for list/search
-- DTO pattern: {Entity}Request with validation, {Entity}Response with selected fields (no passwords)
-- Cascade delete pattern: query child records, iterate and delete grandchildren, then delete children, then parent
-- Course entity has no createdAt field — use null in response
-- Test cleanup: DELETE FROM teacher WHERE name != 'admin' to preserve admin user for login
-- Teacher tests: use PasswordEncoder bean to create BCrypt hashes in @BeforeEach
+- Controllers return ResponseEntity<?> with error body Map pattern for forbidden/error responses
+- Role-based access checked via RequestContextHolder.getRole() in controller methods
+- DTOs used for responses with course/teacher name enrichment via service-layer joins
 
 ---
 
@@ -43,6 +39,7 @@ Started: 2026-04-03T17:08:00+08:00
 
 ## 2026-04-03 17:34 - US-002: JWT authentication backend (login/logout/token)
 - JwtUtil: generateToken(userId, role, name), parseToken(), isExpired(), getUserId/Role/Name
+- Secret & expiry configurable via application.yml (jwt.secret, jwt.expiration)
 - AuthController: POST /api/auth/login (validates credentials, returns JWT), POST /api/auth/logout
 - LoginResponse: {token, role, name, userId}
 - LoginRequest: @NotBlank validation on userId, password, role
@@ -57,28 +54,17 @@ Started: 2026-04-03T17:08:00+08:00
 
 ---
 
-## 2026-04-03 18:17 - US-005: Course CRUD backend (admin)
-- CourseController: /api/admin/courses with GET (list), POST (create), PUT /{id} (update), DELETE /{id} (cascade delete), GET /search
-- CourseRequest: @NotBlank @Size(2-50) name, @NotNull @Min(1) @Max(10) credit
-- CourseResponse: id, name, credit, createdAt
-- CourseService: full CRUD with cascade delete (openings → selections → grades)
-- Search: supports id, name (fuzzy), creditMin, creditMax filters with pagination
-- 12 tests: create, credit validation min/max, name length, update, cascade delete, fuzzy search, credit range search, id search, pagination, auth check
+## 2026-04-03 18:42 - US-007: Selection (选课) backend - student course enrollment
+- SelectionService: listAvailable, create, listMine, getTotalCredits, withdraw
+- StudentSelectionController: 4 endpoints under /api/student/selections
+  - GET /available - browse openings not yet selected, with fuzzy/exact courseName filter
+  - POST / - create selection with validation (duplicate, 24 credit limit, 8 course limit)
+  - GET /mine - list student's selections with totalCredits count
+  - DELETE /{id} - withdraw, cascading delete of associated grade
+- DTOs: AvailableOpeningResponse, SelectionResponse
+- 9 tests: list available, select course, cannot select twice, credit limit, course limit, withdraw with grade cascade, mine with credits, fuzzy search, non-student forbidden
 - Build and all tests pass
-- **Learnings:** Course entity has no createdAt getter; use null in response DTO
-
----
-
-## 2026-04-03 18:30 - US-006: Opening management backend (admin + teacher)
-- AdminOpeningController: GET /api/admin/openings/search (teacherId, teacherName, courseId, courseName, fuzzy, page, size), DELETE /api/admin/openings/{id}
-- TeacherOpeningController: GET /api/teacher/openings, POST /api/teacher/openings {courseId}, GET /api/teacher/courses/available
-- OpeningService: search, delete (cascade), listByTeacher, createForTeacher, getAvailableCourses
-- OpeningResponse DTO: id, courseId, courseName, teacherId, teacherName, semester
-- Semester auto-calculated from current date (上学期: Aug-Jan, 下学期: Feb-Jul)
-- Duplicate prevention: same teacher + course + semester → 400 error
-- Search filters teacherName/courseName in-memory after DB query (joins not available via MyBatis-Plus easily)
-- 10 tests: teacher create opening, duplicate prevention, teacher sees own openings, available courses, admin fuzzy search by course name, admin exact search by teacher name, admin cascade delete, admin auth check, teacher auth check
-- Build and all 63 tests pass
-- **Learnings:** Test cleanup must preserve admin teacher (WHERE name != 'admin'); use PasswordEncoder bean in tests for BCrypt hashes; semester logic based on current month
+- Files: SelectionService.java, StudentSelectionController.java, AvailableOpeningResponse.java, SelectionResponse.java, SelectionTest.java
+- **Learnings:** Cascade delete pattern (grade → selection) used in both withdraw and opening deletion
 
 ---
