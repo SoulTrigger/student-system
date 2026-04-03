@@ -24,6 +24,10 @@ import MyCourses from '../views/teacher/MyCourses.vue'
 import GradeManage from '../views/teacher/GradeManage.vue'
 import GradeEntry from '../views/teacher/GradeEntry.vue'
 import ProfileEdit from '../views/teacher/ProfileEdit.vue'
+import CourseSelection from '../views/student/CourseSelection.vue'
+import MySelections from '../views/student/MySelections.vue'
+import StudentGradeQuery from '../views/student/StudentGradeQuery.vue'
+import StudentProfileEdit from '../views/student/ProfileEdit.vue'
 
 const routes = [
   {
@@ -39,6 +43,10 @@ const routes = [
     children: [
       { path: '', redirect: '/login' },
       { path: 'student', name: 'StudentHome', component: StudentHome, meta: { role: '学生' } },
+      { path: 'student/selections', name: 'CourseSelection', component: CourseSelection, meta: { role: '学生' } },
+      { path: 'student/my-selections', name: 'MySelections', component: MySelections, meta: { role: '学生' } },
+      { path: 'student/grades', name: 'StudentGradeQuery', component: StudentGradeQuery, meta: { role: '学生' } },
+      { path: 'student/profile', name: 'StudentProfileEdit', component: StudentProfileEdit, meta: { role: '学生' } },
       { path: 'teacher', name: 'TeacherHome', component: TeacherHome, meta: { role: '老师' } },
       { path: 'teacher/courses', name: 'CourseOpen', component: CourseOpen, meta: { role: '老师' } },
       { path: 'teacher/my-courses', name: 'MyCourses', component: MyCourses, meta: { role: '老师' } },

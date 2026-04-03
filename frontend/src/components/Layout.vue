@@ -10,7 +10,23 @@
     <div class="body">
       <div class="sidebar">
         <el-menu :default-active="activeMenu" background-color="#1a1a2e" text-color="#fff" active-text-color="#409eff" router>
-          <template v-if="auth.role === '老师'">
+          <template v-if="auth.role === '学生'">
+            <el-menu-item index="/student">学生首页</el-menu-item>
+            <el-sub-menu index="student-selection">
+              <template #title><span>选课管理</span></template>
+              <el-menu-item index="/student/selections">选课查询</el-menu-item>
+              <el-menu-item index="/student/my-selections">已选课程</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="student-grades">
+              <template #title><span>学生成绩管理</span></template>
+              <el-menu-item index="/student/grades">成绩查询</el-menu-item>
+            </el-sub-menu>
+            <el-sub-menu index="student-profile">
+              <template #title><span>个人中心</span></template>
+              <el-menu-item index="/student/profile">信息修改</el-menu-item>
+            </el-sub-menu>
+          </template>
+          <template v-else-if="auth.role === '老师'">
             <el-menu-item index="/teacher">教师首页</el-menu-item>
             <el-sub-menu index="teacher-courses">
               <template #title><span>开设课程</span></template>
@@ -29,11 +45,6 @@
           </template>
           <template v-else-if="auth.role === '管理员'">
             <el-menu-item v-for="item in adminMenus" :key="item.path" :index="item.path">
-              <span>{{ item.label }}</span>
-            </el-menu-item>
-          </template>
-          <template v-else>
-            <el-menu-item v-for="item in studentMenus" :key="item.path" :index="item.path">
               <span>{{ item.label }}</span>
             </el-menu-item>
           </template>
@@ -62,12 +73,6 @@ const adminMenus = [
   { path: '/admin/courses', label: '课程管理' },
   { path: '/admin/openings', label: '开课管理' },
   { path: '/admin/grades', label: '成绩管理' }
-]
-
-const studentMenus = [
-  { path: '/student', label: '首页' },
-  { path: '/student/selections', label: '选课管理' },
-  { path: '/student/grades', label: '成绩查询' }
 ]
 
 const activeMenu = computed(() => route.path)
