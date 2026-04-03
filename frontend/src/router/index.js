@@ -5,6 +5,10 @@ import Layout from '../components/Layout.vue'
 import StudentHome from '../views/StudentHome.vue'
 import TeacherHome from '../views/TeacherHome.vue'
 import AdminHome from '../views/AdminHome.vue'
+import StudentList from '../views/admin/StudentList.vue'
+import AddStudent from '../views/admin/AddStudent.vue'
+import EditStudent from '../views/admin/EditStudent.vue'
+import StudentSearch from '../views/admin/StudentSearch.vue'
 
 const routes = [
   {
@@ -21,7 +25,11 @@ const routes = [
       { path: '', redirect: '/login' },
       { path: 'student', name: 'StudentHome', component: StudentHome, meta: { role: '学生' } },
       { path: 'teacher', name: 'TeacherHome', component: TeacherHome, meta: { role: '老师' } },
-      { path: 'admin', name: 'AdminHome', component: AdminHome, meta: { role: '管理员' } }
+      { path: 'admin', name: 'AdminHome', component: AdminHome, meta: { role: '管理员' } },
+      { path: 'admin/students', name: 'StudentList', component: StudentList, meta: { role: '管理员' } },
+      { path: 'admin/students/add', name: 'AddStudent', component: AddStudent, meta: { role: '管理员' } },
+      { path: 'admin/students/edit/:id', name: 'EditStudent', component: EditStudent, meta: { role: '管理员' } },
+      { path: 'admin/students/search', name: 'StudentSearch', component: StudentSearch, meta: { role: '管理员' } }
     ]
   }
 ]
