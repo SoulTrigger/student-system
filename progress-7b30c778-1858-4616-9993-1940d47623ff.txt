@@ -17,8 +17,9 @@
 - S14: 前端:管理员-开课表+成绩管理 ✅
 - S15: 前端:教师端(开课+成绩+个人信息) ✅
 - S16: 前端:学生端(选课+成绩+个人信息) ✅
+- S17: 前端:操作日志+导航完善 ✅
 
-## Remaining Stories: 3
+## Remaining Stories: 2
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -36,5 +37,6 @@
 - Frontend teacher pattern: teacher-specific API endpoints (/openings/mine, /grades/teacher); Dashboard doubles as profile page with password change; password change triggers logout+redirect to /login; batch grade input via table selection + dialog with el-input-number per row
 - Frontend student pattern: selection API (/selections/available, /selections/mine, /selections/credits); Dashboard doubles as profile page with password change (same as teacher); Selections page shows credit summary card + available courses table + enrolled courses table with drop confirmation; Grades page shows grade list with average score tag
 - Frontend API pattern: request.js axios instance; each resource gets api/<name>.js; role-specific queries use dedicated endpoints that filter by logged-in user's userId from JWT
+- Frontend logs pattern: readonly table with inline filter form; no pagination (backend returns full list); filter params passed as query params
 
-## Last Updated: 2026-04-05 S16 complete
+## Last Updated: 2026-04-05 S17 complete
