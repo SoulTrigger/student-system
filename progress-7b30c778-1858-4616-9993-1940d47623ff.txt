@@ -5,36 +5,26 @@
 - **S02: 后端实体类+Mapper+级联删除** ✅ DONE
 - **S03: AUTH后端:统一登录+JWT+修改密码** ✅ DONE
 - **S04: STU后端:学生CRUD+模糊查询** ✅ DONE
-  - StudentController: GET/POST/PUT/DELETE /api/students
-  - GET: pagination + fuzzy query by name, excludes password via LambdaQueryWrapper select
-  - POST: auto-increment id, BCrypt password (default "123456")
-  - PUT: update name/password
-  - DELETE: removeById + cascadeService.deleteStudentCascade
-  - MybatisPlusConfig: PaginationInnerInterceptor for MySQL
-  - Tests: 7 new — all pass
 - **S05: TCH后端:教师CRUD** ✅ DONE
-  - TeacherController: GET/POST/PUT/DELETE /api/teachers
-  - GET: pagination + fuzzy query by name, excludes password
-  - POST: auto-increment id, BCrypt password (default "123456")
-  - PUT: update name/password
-  - DELETE: removeById + cascadeService.deleteTeacherCascade (级联opening→sel→grade)
-  - Tests: 7 new (autoIncrementId, passwordBcrypted, listNoPassword, fuzzyQuery, deleteCascade, update, pagination) — all pass
+- **S06: CRS后端:课程CRUD** ✅ DONE
+  - CourseController: GET/POST/PUT/DELETE /api/courses
+  - GET: pagination + fuzzy query by name + credit range filter (minCredit/maxCredit)
+  - POST: auto-increment id, credit validation 1-10
+  - PUT: update name/credit with credit validation
+  - DELETE: removeById + cascadeService.deleteCourseCascade
+  - CourseService + CourseServiceImpl: standard IService pattern
+  - Tests: 7 new (autoIncrementId, creditRangeValidation, fuzzyQuery, creditRangeQuery, deleteCascade, update, pagination) — all pass
 
 ## Codebase Patterns
 - **Entity package:** com.student.entity - @Data Lombok, @TableName, @TableId(type=IdType.AUTO)
 - **Mapper package:** com.student.mapper - extends BaseMapper<T>
 - **Service package:** com.student.service (interface) + com.student.service.impl (implementation)
-- **Controller package:** com.student.controller - @RestController, uses Result<T> wrapper, @RequestBody Map<String,String>
+- **Controller package:** com.student.controller - @RestController, uses Result<T> wrapper
 - **Common package:** com.student.common - Result<T> unified response
-- **Util package:** com.student.util - JwtUtil
-- **Filter package:** com.student.filter - JwtFilter (OncePerRequestFilter)
-- **Config:** SecurityConfig, CorsConfig, MybatisPlusConfig (pagination)
 - **CascadeService:** @Transactional, uses LambdaQueryWrapper for conditional deletes
-- **Test:** H2 in-memory DB (MODE=MySQL), schema-h2.sql, spring.sql.init.schema-locations, @ActiveProfiles("test")
-- **Test cleanup:** @BeforeEach manually clears all tables (grade→selection→student/teacher)
-- **Naming:** Entity fields use camelCase (maps to snake_case via mybatis-plus config)
-- **Auth errors:** All auth failures throw RuntimeException with code string, controller maps to generic 401
-- **Controller pattern:** Use @RequestBody Map<String,String> for flexibility, PasswordEncoder for passwords
-- **Controller CRUD pattern (S04/S05):** list(pagination+模糊+exclude password), add(auto-id+BCrypt+null password on response), update(optional fields), delete(removeById+cascade)
+- **Test:** H2 in-memory DB (MODE=MySQL), schema-h2.sql, @ActiveProfiles("test")
+- **Test cleanup:** @BeforeEach manually clears all tables (grade→selection→student/teacher/course)
+- **Controller CRUD pattern:** list(pagination+模糊+filters), add(auto-id+validation), update(optional fields+validation), delete(removeById+cascade)
+- **Course controller:** Uses @RequestBody Map<String,Object> for numeric credit parsing via ((Number) body.get("credit")).intValue()
 
-## Remaining Stories: 14
+## Remaining Stories: 13
