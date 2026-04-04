@@ -11,8 +11,11 @@
 - S08: SEL后端:选课退课+约束 ✅
 - S09: GRD后端:成绩录入查询修改 ✅
 - S10: LOG后端:操作日志(P1) ✅
+- S11: 前端脚手架+路由+登录页 ✅
+- S12: 前端:管理员-学生管理 ✅
+- S13: 前端:管理员-教师+课程管理 ✅
 
-## Remaining Stories: 9
+## Remaining Stories: 6
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -25,5 +28,8 @@
 - Service layer: interface + impl pattern; batch ops use @Transactional; joined data built via Map<String,Object>
 - Grade patterns: teacher-scoped queries filter by opening->teacher chain; student queries filter by selection->student
 - Logging: AOP @Aspect with @Around advice on controller methods; LogAspect extracts userId/role from request attributes; OperationLog entity persisted via OperationLogService; admin-only query via LogController with filtering by operator/operation/targetType/timeRange
+- Frontend: Vue3 + Element Plus + Pinia + Vue Router; axios instance with JWT interceptor and 401 auto-logout; role-based route groups (/admin, /teacher, /student); localStorage for token persistence; Layout.vue with sidebar menu per role
+- Frontend admin CRUD pattern: api/<resource>.js with CRUD functions; view uses el-card + el-table + el-pagination + el-dialog; search input + add button in card header; edit/add share dialog with isEdit flag; delete with ElMessageBox.confirm showing cascade warning; form validation via el-form rules
+- Frontend course pattern: extends CRUD pattern with credit range filters (minCredit/maxCredit query params), el-input-number for credit input with min=1 max=10, custom validator for credit range
 
-## Last Updated: 2026-04-05 S10 complete
+## Last Updated: 2026-04-05 S13 complete
