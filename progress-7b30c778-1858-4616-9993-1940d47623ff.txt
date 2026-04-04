@@ -11,8 +11,14 @@
   - PUT: update name/password
   - DELETE: removeById + cascadeService.deleteStudentCascade
   - MybatisPlusConfig: PaginationInnerInterceptor for MySQL
+  - Tests: 7 new — all pass
+- **S05: TCH后端:教师CRUD** ✅ DONE
+  - TeacherController: GET/POST/PUT/DELETE /api/teachers
+  - GET: pagination + fuzzy query by name, excludes password
+  - POST: auto-increment id, BCrypt password (default "123456")
+  - PUT: update name/password
+  - DELETE: removeById + cascadeService.deleteTeacherCascade (级联opening→sel→grade)
   - Tests: 7 new (autoIncrementId, passwordBcrypted, listNoPassword, fuzzyQuery, deleteCascade, update, pagination) — all pass
-  - mvn compile ✅, mvn test ✅ (20 total)
 
 ## Codebase Patterns
 - **Entity package:** com.student.entity - @Data Lombok, @TableName, @TableId(type=IdType.AUTO)
@@ -29,5 +35,6 @@
 - **Naming:** Entity fields use camelCase (maps to snake_case via mybatis-plus config)
 - **Auth errors:** All auth failures throw RuntimeException with code string, controller maps to generic 401
 - **Controller pattern:** Use @RequestBody Map<String,String> for flexibility, PasswordEncoder for passwords
+- **Controller CRUD pattern (S04/S05):** list(pagination+模糊+exclude password), add(auto-id+BCrypt+null password on response), update(optional fields), delete(removeById+cascade)
 
-## Remaining Stories: 15
+## Remaining Stories: 14
