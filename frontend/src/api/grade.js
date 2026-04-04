@@ -15,3 +15,11 @@ export function updateGradeScore(id, score) {
 export function batchSaveGrades(grades) {
   return request.post('/grades/batch', grades)
 }
+
+export function getStudentGrades() {
+  return request.get('/grades/student')
+}
+
+export function getStudentAverage() {
+  return request.get('/grades/student/average')
+}
