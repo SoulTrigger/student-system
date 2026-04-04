@@ -10,8 +10,9 @@
 - S07: OPN后端:开课管理 ✅
 - S08: SEL后端:选课退课+约束 ✅
 - S09: GRD后端:成绩录入查询修改 ✅
+- S10: LOG后端:操作日志(P1) ✅
 
-## Remaining Stories: 10
+## Remaining Stories: 9
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -23,5 +24,6 @@
 - Tests: @SpringBootTest + @ActiveProfiles("test"), @BeforeEach cleanup, mapper-based
 - Service layer: interface + impl pattern; batch ops use @Transactional; joined data built via Map<String,Object>
 - Grade patterns: teacher-scoped queries filter by opening->teacher chain; student queries filter by selection->student
+- Logging: AOP @Aspect with @Around advice on controller methods; LogAspect extracts userId/role from request attributes; OperationLog entity persisted via OperationLogService; admin-only query via LogController with filtering by operator/operation/targetType/timeRange
 
-## Last Updated: 2026-04-04 S09 complete
+## Last Updated: 2026-04-05 S10 complete
