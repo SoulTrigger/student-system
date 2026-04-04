@@ -58,3 +58,15 @@ CREATE TABLE IF NOT EXISTS grade (
     semester VARCHAR(20),
     FOREIGN KEY (selection_id) REFERENCES selection(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 操作日志表
+CREATE TABLE IF NOT EXISTS operation_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    operation VARCHAR(100) NOT NULL,
+    operator VARCHAR(50),
+    operator_role VARCHAR(20),
+    target_type VARCHAR(50),
+    target_id BIGINT,
+    detail VARCHAR(500),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

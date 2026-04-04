@@ -9,8 +9,9 @@
 - S06: CRS后端:课程CRUD ✅
 - S07: OPN后端:开课管理 ✅
 - S08: SEL后端:选课退课+约束 ✅
+- S09: GRD后端:成绩录入查询修改 ✅
 
-## Remaining Stories: 11
+## Remaining Stories: 10
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -20,5 +21,7 @@
 - Cascade: CascadeService handles cascading deletes via mapper queries
 - JWT: userId/role set as request attributes by JwtFilter
 - Tests: @SpringBootTest + @ActiveProfiles("test"), @BeforeEach cleanup, mapper-based
+- Service layer: interface + impl pattern; batch ops use @Transactional; joined data built via Map<String,Object>
+- Grade patterns: teacher-scoped queries filter by opening->teacher chain; student queries filter by selection->student
 
-## Last Updated: 2026-04-04 S08 complete
+## Last Updated: 2026-04-04 S09 complete

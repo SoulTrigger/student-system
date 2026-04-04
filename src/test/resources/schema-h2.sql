@@ -37,3 +37,13 @@ CREATE TABLE IF NOT EXISTS grade (
     score INT,
     semester VARCHAR(20)
 );
+CREATE TABLE IF NOT EXISTS operation_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    operation VARCHAR(100) NOT NULL,
+    operator VARCHAR(50),
+    operator_role VARCHAR(20),
+    target_type VARCHAR(50),
+    target_id BIGINT,
+    detail VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
