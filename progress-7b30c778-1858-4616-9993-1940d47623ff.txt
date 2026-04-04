@@ -4,30 +4,30 @@
 - **S01: 项目脚手架+数据库Schema** ✅ DONE
 - **S02: 后端实体类+Mapper+级联删除** ✅ DONE
 - **S03: AUTH后端:统一登录+JWT+修改密码** ✅ DONE
-  - JwtUtil: HMAC-SHA token generation/parsing, 2h expiration
-  - JwtFilter: OncePerRequestFilter, extracts userId+role from Bearer token, sets SecurityContext
-  - AuthService/AuthServiceImpl: login (3 roles: student/teacher/admin), changePassword with BCrypt
-  - AuthController: POST /api/auth/login, PUT /api/auth/password
-  - SecurityConfig: added JwtFilter before UsernamePasswordAuthenticationFilter
-  - Result: unified response wrapper (code/message/data)
-  - Login returns 401 with generic message (no info leakage)
-  - Password change requires old password, new password min length 6
-  - Tests: 8 new tests (studentLogin, teacherLogin, wrongPassword, nonexistentUser, changePassword, shortPassword, wrongOldPassword, jwtClaims) — all pass
-  - mvn compile ✅, mvn test ✅ (13 total: 8 auth + 4 cascade + 1 contextLoad)
+- **S04: STU后端:学生CRUD+模糊查询** ✅ DONE
+  - StudentController: GET/POST/PUT/DELETE /api/students
+  - GET: pagination + fuzzy query by name, excludes password via LambdaQueryWrapper select
+  - POST: auto-increment id, BCrypt password (default "123456")
+  - PUT: update name/password
+  - DELETE: removeById + cascadeService.deleteStudentCascade
+  - MybatisPlusConfig: PaginationInnerInterceptor for MySQL
+  - Tests: 7 new (autoIncrementId, passwordBcrypted, listNoPassword, fuzzyQuery, deleteCascade, update, pagination) — all pass
+  - mvn compile ✅, mvn test ✅ (20 total)
 
 ## Codebase Patterns
 - **Entity package:** com.student.entity - @Data Lombok, @TableName, @TableId(type=IdType.AUTO)
 - **Mapper package:** com.student.mapper - extends BaseMapper<T>
 - **Service package:** com.student.service (interface) + com.student.service.impl (implementation)
-- **Controller package:** com.student.controller - @RestController, uses Result<T> wrapper
+- **Controller package:** com.student.controller - @RestController, uses Result<T> wrapper, @RequestBody Map<String,String>
 - **Common package:** com.student.common - Result<T> unified response
 - **Util package:** com.student.util - JwtUtil
 - **Filter package:** com.student.filter - JwtFilter (OncePerRequestFilter)
+- **Config:** SecurityConfig, CorsConfig, MybatisPlusConfig (pagination)
 - **CascadeService:** @Transactional, uses LambdaQueryWrapper for conditional deletes
-- **Config:** SecurityConfig (JwtFilter + BCryptPasswordEncoder + STATELESS), CorsConfig
 - **Test:** H2 in-memory DB (MODE=MySQL), schema-h2.sql, spring.sql.init.schema-locations, @ActiveProfiles("test")
-- **Test cleanup:** @BeforeEach manually clears all tables via selectList+deleteById
+- **Test cleanup:** @BeforeEach manually clears all tables (grade→selection→student/teacher)
 - **Naming:** Entity fields use camelCase (maps to snake_case via mybatis-plus config)
 - **Auth errors:** All auth failures throw RuntimeException with code string, controller maps to generic 401
+- **Controller pattern:** Use @RequestBody Map<String,String> for flexibility, PasswordEncoder for passwords
 
-## Remaining Stories: 16
+## Remaining Stories: 15
