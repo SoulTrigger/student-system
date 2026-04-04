@@ -16,8 +16,9 @@
 - S13: 前端:管理员-教师+课程管理 ✅
 - S14: 前端:管理员-开课表+成绩管理 ✅
 - S15: 前端:教师端(开课+成绩+个人信息) ✅
+- S16: 前端:学生端(选课+成绩+个人信息) ✅
 
-## Remaining Stories: 4
+## Remaining Stories: 3
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -33,6 +34,7 @@
 - Frontend: Vue3 + Element Plus + Pinia + Vue Router; axios instance with JWT interceptor and 401 auto-logout; role-based route groups (/admin, /teacher, /student); localStorage for token persistence; Layout.vue with sidebar menu per role
 - Frontend admin CRUD pattern: api/<resource>.js with CRUD functions; view uses el-card + el-table + el-pagination + el-dialog; search input + add button in card header; edit/add share dialog with isEdit flag; delete with ElMessageBox.confirm showing cascade warning; form validation via el-form rules
 - Frontend teacher pattern: teacher-specific API endpoints (/openings/mine, /grades/teacher); Dashboard doubles as profile page with password change; password change triggers logout+redirect to /login; batch grade input via table selection + dialog with el-input-number per row
-- Frontend API pattern: request.js axios instance; each resource gets api/<name>.js; teacher-specific queries use dedicated endpoints that filter by logged-in teacher's userId from JWT
+- Frontend student pattern: selection API (/selections/available, /selections/mine, /selections/credits); Dashboard doubles as profile page with password change (same as teacher); Selections page shows credit summary card + available courses table + enrolled courses table with drop confirmation; Grades page shows grade list with average score tag
+- Frontend API pattern: request.js axios instance; each resource gets api/<name>.js; role-specific queries use dedicated endpoints that filter by logged-in user's userId from JWT
 
-## Last Updated: 2026-04-05 S15 complete
+## Last Updated: 2026-04-05 S16 complete
