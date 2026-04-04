@@ -14,8 +14,9 @@
 - S11: 前端脚手架+路由+登录页 ✅
 - S12: 前端:管理员-学生管理 ✅
 - S13: 前端:管理员-教师+课程管理 ✅
+- S14: 前端:管理员-开课表+成绩管理 ✅
 
-## Remaining Stories: 6
+## Remaining Stories: 5
 
 ## Codebase Patterns
 - Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
@@ -31,5 +32,7 @@
 - Frontend: Vue3 + Element Plus + Pinia + Vue Router; axios instance with JWT interceptor and 401 auto-logout; role-based route groups (/admin, /teacher, /student); localStorage for token persistence; Layout.vue with sidebar menu per role
 - Frontend admin CRUD pattern: api/<resource>.js with CRUD functions; view uses el-card + el-table + el-pagination + el-dialog; search input + add button in card header; edit/add share dialog with isEdit flag; delete with ElMessageBox.confirm showing cascade warning; form validation via el-form rules
 - Frontend course pattern: extends CRUD pattern with credit range filters (minCredit/maxCredit query params), el-input-number for credit input with min=1 max=10, custom validator for credit range
+- Frontend opening pattern: lookup maps for course/teacher names via computed Map; el-select for course/teacher filtering; add dialog uses select dropdowns; delete with cascade warning
+- Frontend grade pattern: read-only detail display in edit dialog (student/course/semester disabled); el-input-number with min=0 max=100 for score; semester filter via computed options from data
 
-## Last Updated: 2026-04-05 S13 complete
+## Last Updated: 2026-04-05 S14 complete

@@ -4,6 +4,10 @@ export function getOpenings(params) {
   return request.get('/openings', { params })
 }
 
+export function getMyOpenings(params) {
+  return request.get('/openings/mine', { params })
+}
+
 export function addOpening(data) {
   return request.post('/openings', data)
 }
