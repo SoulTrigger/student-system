@@ -1,31 +1,24 @@
-# Progress Log - StudentSystem Feature Dev
+# Feature-Dev Progress: Student System
 
-## Story Results
-- **S01: 项目脚手架+数据库Schema** ✅ DONE
-- **S02: 后端实体类+Mapper+级联删除** ✅ DONE
-- **S03: AUTH后端:统一登录+JWT+修改密码** ✅ DONE
-- **S04: STU后端:学生CRUD+模糊查询** ✅ DONE
-- **S05: TCH后端:教师CRUD** ✅ DONE
-- **S06: CRS后端:课程CRUD** ✅ DONE
-- **S07: OPN后端:开课管理** ✅ DONE
-  - OpeningController: GET/POST/DELETE /api/openings + GET /api/openings/mine
-  - GET: pagination + filters (courseId, teacherId, semester)
-  - POST: 教师开设课程(自动从JWT取teacherId) / 管理员指定teacherId, 防重复(同教师+课程+学期返回409)
-  - GET /mine: 只返回当前JWT教师的开课记录
-  - DELETE: 管理员删除+级联(cascadeService.deleteOpeningCascade)
-  - Tests: 6 new (create, duplicate, listByTeacher, autoIncrementId, delete, filters) — all pass
+## Completed Stories
+- S01: 项目脚手架+数据库Schema ✅
+- S02: 后端实体类+Mapper+级联删除 ✅
+- S03: AUTH后端:统一登录+JWT+修改密码 ✅
+- S04: STU后端:学生CRUD+模糊查询 ✅
+- S05: TCH后端:教师CRUD ✅
+- S06: CRS后端:课程CRUD ✅
+- S07: OPN后端:开课管理 ✅
+- S08: SEL后端:选课退课+约束 ✅
+
+## Remaining Stories: 11
 
 ## Codebase Patterns
-- **Entity package:** com.student.entity - @Data Lombok, @TableName, @TableId(type=IdType.AUTO)
-- **Mapper package:** com.student.mapper - extends BaseMapper<T>
-- **Service package:** com.student.service (interface) + com.student.service.impl (implementation)
-- **Controller package:** com.student.controller - @RestController, uses Result<T> wrapper
-- **Common package:** com.student.common - Result<T> unified response
-- **CascadeService:** @Transactional, uses LambdaQueryWrapper for conditional deletes
-- **Test:** H2 in-memory DB (MODE=MySQL), schema-h2.sql, @ActiveProfiles("test")
-- **Test cleanup:** @BeforeEach manually clears relevant tables
-- **Controller CRUD pattern:** list(pagination+filters), add(auto-id+validation+role-check), delete(removeById+cascade)
-- **Request attributes:** JWT filter sets userId(Long) and role(String) on request attributes
-- **Role-based logic:** Check role from request.getAttribute("role") for role-specific behavior (e.g. teacher auto-uses own ID)
+- Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
+- Controller: @RestController + @RequiredArgsConstructor, Result<T> wrapper
+- Validation: inline checks in controller, return Result.error(code, msg)
+- Pagination: MyBatis-Plus Page<T>
+- Cascade: CascadeService handles cascading deletes via mapper queries
+- JWT: userId/role set as request attributes by JwtFilter
+- Tests: @SpringBootTest + @ActiveProfiles("test"), @BeforeEach cleanup, mapper-based
 
-## Remaining Stories: 12
+## Last Updated: 2026-04-04 S08 complete
