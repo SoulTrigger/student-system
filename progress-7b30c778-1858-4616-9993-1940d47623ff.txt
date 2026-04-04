@@ -1,0 +1,19 @@
+# Progress Log - StudentSystem Feature Dev
+
+## Story Results
+- **S01: 项目脚手架+数据库Schema** ✅ DONE
+  - Backend: Spring Boot 3.2.5, port 8082, MyBatis-Plus 3.5.5, JWT, Lombok, H2 for tests
+  - Frontend: Vue 3 + Element Plus + Pinia + Axios + ECharts + Vue Router, port 5173
+  - schema.sql: 6 tables (student, teacher, course, opening, selection, grade) with FKs, unique constraints, CHECK constraints
+  - application.yml: MySQL datasource, port 8082, JWT config (2h expiration)
+  - mvn compile ✅, npm run build ✅, mvn test ✅ (1 test passing)
+
+## Codebase Patterns
+- **Entity package:** com.student.entity - @Data Lombok, @TableName, @TableId(type=IdType.AUTO)
+- **Mapper package:** com.student.mapper - extends BaseMapper<T>
+- **Service package:** com.student.service (interface) + com.student.service.impl (implementation)
+- **Config:** SecurityConfig, CorsConfig in com.student.config
+- **Test:** H2 in-memory DB for tests, spring-boot-starter-test + JUnit 5
+- **Naming:** Entity fields use camelCase (maps to snake_case via mybatis-plus config)
+
+## Remaining Stories: 17
