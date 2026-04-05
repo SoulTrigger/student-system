@@ -1,0 +1,47 @@
+# Feature-Dev Progress: Student System
+
+## Completed Stories
+- S01: 项目脚手架+数据库Schema ✅
+- S02: 后端实体类+Mapper+级联删除 ✅
+- S03: AUTH后端:统一登录+JWT+修改密码 ✅
+- S04: STU后端:学生CRUD+模糊查询 ✅
+- S05: TCH后端:教师CRUD ✅
+- S06: CRS后端:课程CRUD ✅
+- S07: OPN后端:开课管理 ✅
+- S08: SEL后端:选课退课+约束 ✅
+- S09: GRD后端:成绩录入查询修改 ✅
+- S10: LOG后端:操作日志(P1) ✅
+- S11: 前端脚手架+路由+登录页 ✅
+- S12: 前端:管理员-学生管理 ✅
+- S13: 前端:管理员-教师+课程管理 ✅
+- S14: 前端:管理员-开课表+成绩管理 ✅
+- S15: 前端:教师端(开课+成绩+个人信息) ✅
+- S16: 前端:学生端(选课+成绩+个人信息) ✅
+- S17: 前端:操作日志+导航完善 ✅
+- S18: 集成测试+级联验证+安全检查 ✅
+
+## All Stories Complete! 🎉
+
+## S18 Results
+- IntegrationTest.java: 18 tests covering login flow, 4 cascade delete scenarios, selection constraints (8-course limit, 24-credit limit, duplicate), batch grades, security (BCrypt, password change, SQL injection)
+- JaCoCo added to pom.xml
+- Service layer coverage: 96.1% (219/228 lines) — exceeds 80% target
+- All 88 tests pass (mvn test)
+- Frontend vite build succeeds
+- Commit: feat: S18 - 集成测试+级联验证+安全检查
+
+## Codebase Patterns
+- Entity: Lombok @Data, @TableName, @TableId(type=AUTO) auto-increment
+- Controller: @RestController + @RequiredArgsConstructor, Result<T> wrapper
+- Validation: inline checks in controller, return Result.error(code, msg)
+- Pagination: MyBatis-Plus Page<T>
+- Cascade: CascadeService handles cascading deletes via mapper queries
+- JWT: userId/role set as request attributes by JwtFilter
+- Tests: @SpringBootTest + @ActiveProfiles("test"), @BeforeEach cleanup, mapper-based
+- Service layer: interface + impl pattern; batch ops use @Transactional; joined data built via Map<String,Object>
+- Grade patterns: teacher-scoped queries filter by opening->teacher chain; student queries filter by selection->student
+- Logging: AOP @Aspect with @Around advice on controller methods
+- Frontend: Vue3 + Element Plus + Pinia + Vue Router; axios instance with JWT interceptor and 401 auto-logout; role-based route groups (/admin, /teacher, /student); localStorage for token persistence; Layout.vue with sidebar menu per role
+- Integration test pattern: @SpringBootTest + @AutoConfigureMockMvc + @ActiveProfiles("test"); helper methods for entity creation and token generation; @BeforeEach cleans all tables in dependency order; tests use mockMvc + objectMapper for full HTTP flow verification
+
+## Last Updated: 2026-04-05 S18 complete — ALL STORIES DONE
